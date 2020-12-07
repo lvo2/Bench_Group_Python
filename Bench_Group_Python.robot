@@ -13,35 +13,33 @@ ${DashboardTitle}    LinkedIn: Log In or Sign Up
 ${DashboardTitleAfterLogin}    LinkedIn Login, Sign in | LinkedIn
 
 *** Test Cases ***
-Senario: Login Should Failed with Unregistered Mail Address
-    Open LinkedinPage
-    Check Title
+Senario: Login Successfully in Automation Practice Site
+    Open Automation Practice Page
+    Click Login
     Enter User Name
     Enter Wrong Password
-    Click Login
-    Expected Message Error
+    Click SignUp
+    Expected Login Success
 
 *** Keywords ***
-Open LinkedinPage
+Open Automation Practice Page
     open browser    ${SiteUrl}    ${Browser}
     Maximize Browser Window
 
-Check Title
-    Title Should be    ${DashboardTitle}
+Click Login
+    Click Element    class:login
 
 Enter User Name
-    Input Text    id=session_key    ${Username}
+    Wait Until Element Is Visible    id=email
+    Input Text    id=email    ${Username}
 
 Enter Wrong Password
-    Input Text    id=session_password    ${Password}
+    Input Text    id=passwd    ${Password}
 
-Click Login
-    Click Button    xpath: //*[@id="header"]/div[2]/div/div/nav/div[1]/a
-    Wait Until Element Is Visible    id=error-for-password
-    Take Screenshot
+Click SignUp
+    Click Button    id=SubmitLogin
 
-Expected Message Error
-    ${getText}    Get Text    id=error-for-password
-    Log Many    ${getText}
+Expected Login Success
+    Wait Until Element Is Visible    xpath://*[@id="center_column"]/h1
     Take Screenshot
     [Teardown]
