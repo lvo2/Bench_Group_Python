@@ -1,7 +1,6 @@
 *** Settings ***
 Test Teardown     Close Browser
 Library           Selenium2Library
-Library           String
 Library           Screenshot
 
 *** Variables ***
@@ -9,8 +8,6 @@ ${Username}       vongoclien@gmail.com
 ${Password}       lienvo@123
 ${Browser}        Chrome
 ${SiteUrl}        http://automationpractice.com/index.php
-${DashboardTitle}    LinkedIn: Log In or Sign Up
-${DashboardTitleAfterLogin}    LinkedIn Login, Sign in | LinkedIn
 
 *** Test Cases ***
 Senario: Login Successfully in Automation Practice Site
