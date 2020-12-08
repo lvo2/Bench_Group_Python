@@ -1,6 +1,6 @@
 *** Settings ***
 Test Teardown     Close Browser
-Library           Selenium2Library
+Library           SeleniumLibrary
 Library           Screenshot
 
 *** Variables ***
@@ -8,6 +8,10 @@ ${Username}       vongoclien@gmail.com
 ${Password}       lienvo@123
 ${Browser}        Chrome
 ${SiteUrl}        http://automationpractice.com/index.php
+${CategoryWomen}    xpath://*[@id="block_top_menu"]/ul/li[1]/a
+${CategoryType}    xpath://*[@id="categories_block_left"]/div/ul/li[2]/a
+${Item}           xpath://*[@id="center_column"]/ul/li[5]
+${MyCart}         xpath://*[@id="header"]/div[3]/div/div/div[3]/div/a
 
 *** Test Cases ***
 Senario: Login Successfully in Automation Practice Site
@@ -18,9 +22,10 @@ Senario: Login Successfully in Automation Practice Site
     Click SignUp
     Expected Login Success
 
-Senario: Buy a T-Shirt
+Senario: Add an item into cart
     Login Page
-    Click An Item
+    ${ItemUnit}    Get Text    xpath://*[@id="header"]//span[5]
+    Run Keyword If    '${ItemUnit}' == '(empty)'    Add An Item
 
 *** Keywords ***
 Open Automation Practice Page
@@ -54,13 +59,18 @@ Login Page
     Input Text    id=passwd    ${Password}
     Click Button    id=SubmitLogin
 
-Click An Item
-    Click Element    xpath://*[@id="block_top_menu"]/ul/li[3]/a
+Add An Item
+    Click Element    ${CategoryWomen}
+    Click Element    ${CategoryType}
+    Scroll Element Into View    ${Item}
     Mouse Over    xpath://*[@id="center_column"]/ul/li
     Wait Until Element Is Visible    xpath://*[@id="center_column"]/ul/li/div/div[2]/div[2]/a[1]/span
     Click Element    xpath://*[@id="center_column"]/ul/li/div/div[2]/div[2]/a[1]
-    Wait Until Element Is Visible    xpath://*[@id="layer_cart"]/div[1]/div[2]/div[4]/a
-    Click Element    xpath://*[@id="layer_cart"]/div[1]/div[2]/div[4]/a
-    Wait Until Element Is Visible    xpath://*[@id="cart_title"]
+    Wait Until Element Is Visible    id:layer_cart_product_title
+    ${ProductName}    Get Text    id:layer_cart_product_title
+    Click Element    xpath://*[@id="layer_cart"]/div[1]/div[1]/span
+    Wait Until Element Is Visible    xpath://*[@id="center_column"]/ul/li[5]
+    Scroll Element Into View    ${MyCart}
+    Mouse Over    xpath://*[@id="header"]/div[3]/div/div/div[3]/div/a
     Take Screenshot
     [Teardown]
