@@ -4,14 +4,14 @@ Test Teardown     Close Browser
 Resource          ../Resources/resources.robot
 
 *** Test Cases ***
-Senario: Add an item into cart
+Senario: Delete an item from cart
     Given the user want to login page
-    When user want to add an item
-    Then display my cart
+    When user checks on cart
+    Then Display My Cart
 
 *** Keywords ***
 The user want to login page
     Login Page
 
-User want to add an item
-    Check Cart In Case Hover On Image
+User checks on cart
+    Check Cart If Existed An Item

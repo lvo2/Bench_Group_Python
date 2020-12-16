@@ -16,6 +16,7 @@ ${SiteUrl}        http://automationpractice.com/index.php
 ${CategoryWomen}    xpath://*[@id="block_top_menu"]/ul/li[1]/a
 ${CategoryType}    xpath://*[@id="categories_block_left"]/div/ul/li[2]/a
 ${Item}           xpath://*[@id="center_column"]/ul/li[5]
+${Item5}          xpath://*[@id="center_column"]/ul/li[5]/div/div[1]/div/a[1]
 ${MyCart}         xpath://*[@id="header"]/div[3]/div/div/div[3]/div/a
 
 *** Keywords ***
@@ -51,13 +52,20 @@ Login Page
     Input Text    id:email    ${Username}
     Input Text    id:passwd    ${Password}
     Click Button    id:SubmitLogin
-    Check Cart
 
-Check Cart
+Check Cart In Case Hover On Image
     ${ItemUnit}    Get Text    xpath://*[@id="header"]//span[5]
-    Run Keyword If    '${ItemUnit}' == '(empty)'    Add An Item
+    Run Keyword If    '${ItemUnit}' == '(empty)'    Add An Item In Case Hover On Image
 
-Add An Item
+Check Cart In Case Action On Image
+    ${ItemUnit}    Get Text    xpath://*[@id="header"]//span[5]
+    Run Keyword If    '${ItemUnit}' == '(empty)'    Add An Item After Reviewed
+
+Check Cart If Existed An Item
+    ${ItemUnit}    Get Text    xpath://*[@id="header"]//span[5]
+    Run Keyword If    '${ItemUnit}' != '(empty)'    Remove An Item
+
+Add An Item In Case Hover On Image
     Click Element    ${CategoryWomen}
     Click Element    ${CategoryType}
     Scroll Element Into View    ${Item}
@@ -69,7 +77,26 @@ Add An Item
     Click Element    xpath://*[@id="layer_cart"]/div[1]/div[1]/span
     Wait Until Element Is Visible    xpath://*[@id="center_column"]/ul/li[5]
 
-Display An Item Added
+Add An Item After Reviewed
+    Click Element    ${CategoryWomen}
+    Click Element    ${CategoryType}
+    Scroll Element Into View    ${Item5}
+    Click Element    xpath://*[@id="center_column"]/ul/li[5]/div/div[2]/div[2]/a[2]
+    Sleep    3
+    Click Button    xpath://*[@id="add_to_cart"]/button
+    Wait Until Element Is Visible    id:layer_cart_product_title
+    ${ProductName}    Get Text    id:layer_cart_product_title
+    Click Element    xpath://*[@id="layer_cart"]/div[1]/div[2]/div[4]/span/span
+
+Display My Cart
     Scroll Element Into View    ${MyCart}
     Mouse Over    xpath://*[@id="header"]/div[3]/div/div/div[3]/div/a
+    Take Screenshot
+
+Remove An Item
+    Click Element    xpath://*[@id="header"]/div[3]//dl/dt/span/a
+    Wait Until Element Is Visible    xpath://*[@id="header"]//span[5]
+    ${ItemUnit}    Get Text    xpath://*[@id="header"]//span[5]
+    Log    ${ItemUnit}
+    Sleep    3
     Take Screenshot
